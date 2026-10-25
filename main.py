@@ -3,6 +3,10 @@ from constants import SCREEN_WIDTH, SCREEN_HEIGHT, PLAYER_RADIUS
 from logger import log_state
 import pygame  
 
+updatable = pygame.sprite.Group()
+drawable = pygame.sprite.Group()
+
+Player.containers = (updatable, drawable)
 
 def main():
     pygame.init()
@@ -12,6 +16,9 @@ def main():
     x = SCREEN_WIDTH / 2
     y = SCREEN_HEIGHT / 2
     player = Player(x, y, PLAYER_RADIUS )
+    print("Updatable:", len(updatable))
+    print("Drawable:", len(drawable))
+   
     while True:
         log_state()
         for event in pygame.event.get():
@@ -19,8 +26,9 @@ def main():
                 return
             
         screen.fill("black")
-        player.update(dt)
-        player.draw(screen)
+        updatable.update(dt)
+        for sprite in drawable:
+            sprite.draw(screen)
 
         pygame.display.flip()
         dt = clock.tick(60) / 1000
